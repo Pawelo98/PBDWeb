@@ -18,8 +18,10 @@
 	
 	<div id="container">
 		<div id="content">
-		
-			<input id="value1" type="button" value="Put data in database" onclick="saveUsers" method="POST"/>
+			
+			<form action="list" method="post"> 
+				<input id="value1" type="submit" value="Put data in database" onclick="saveUsers"/>
+			</form>
 		
 			<table>
 				<tr>
