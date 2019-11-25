@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.github.javafaker.Faker;
 
@@ -34,8 +33,8 @@ public class UserController {
 		return "list-users";
 	}
 	
-	@PostMapping("/saveUsers")
-	public String saveUsers(@RequestParam("value1") String str)
+	@PostMapping("/list")
+	public String saveUsers()
 	{
 		String[] roleList = new String[3];
 		roleList[0] = "admin";
