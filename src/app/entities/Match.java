@@ -65,7 +65,7 @@ public class Match {
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
     				CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="Id")
+	@JoinColumn(name="id")
 	private League league;
 
 	public Match(int host, int visitor, int home_goals, int away_goals, Date game_date, String winner) {
