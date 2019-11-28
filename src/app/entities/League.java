@@ -83,7 +83,7 @@ public class League {
     @Column(name="Draw_pts")
 	private int draw_pts;
     
-    @OneToMany(mappedBy="Leagues",
+    @OneToMany(mappedBy="league",
     		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
     				CascadeType.DETACH, CascadeType.REFRESH})
     private List<Match> matches;
@@ -138,6 +138,16 @@ public class League {
 
 	public void setDraw_pts(int draw_pts) {
 		this.draw_pts = draw_pts;
+	}
+	
+	
+
+	public List<Match> getMatches() {
+		return matches;
+	}
+
+	public void setMatches(List<Match> matches) {
+		this.matches = matches;
 	}
 
 	@Override
