@@ -25,16 +25,18 @@
 		
 			<table>
 				<tr>
-					<th> Id </th>
-					<th> Login </th>
-					<th> Password </th>
+					<th> Name </th>
+					<th> Win_pts </th>
+					<th> Draw_pts </th>
+					<th> Level </th>
 				</tr>
 				
 				<c:forEach var="tempUser" items="${users}">
 					<tr>
-						<td> ${tempUser.id} </td>
-						<td> ${tempUser.login} </td>
-						<td> ${tempUser.password} </td>
+						<td> ${tempUser.name} </td>
+						<td> ${tempUser.level} </td>
+						<td> ${tempUser.win_pts} </td>
+						<td> ${tempUser.draw_pts} </td>
 					</tr>
 				</c:forEach>
 			</table>
