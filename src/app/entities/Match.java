@@ -41,17 +41,20 @@ public class Match {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="Id")
-	private int id;
+	private int match_id;
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="host_id")
+	@JoinColumn(name="club_id")
 	private Club host;
 	
-	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="visitor_id")
-	private Club visitor;
+	
+	/*
+	 * @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+	 * CascadeType.DETACH, CascadeType.REFRESH})
+	 * 
+	 * @JoinColumn(name="club_id") private Club visitor;
+	 */
 	
 	@Column(name="Home_goals")
 	private int home_goals;
@@ -69,7 +72,7 @@ public class Match {
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
     				CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="id")
+	@JoinColumn(name="league_id")
 	private League league;
 
 	public Match(int home_goals, int away_goals, Date game_date, String winner) {
@@ -79,15 +82,14 @@ public class Match {
 		this.game_date = game_date;
 		this.winner =Winner.valueOf(winner);
 	}
-
-	public int getId() {
-		return id;
+	
+	public int getMatch_id() {
+		return match_id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setMatch_id(int match_id) {
+		this.match_id = match_id;
 	}
-
 
 	public Club getHost() {
 		return host;
@@ -97,13 +99,11 @@ public class Match {
 		this.host = host;
 	}
 
-	public Club getVisitor() {
-		return visitor;
-	}
-
-	public void setVisitor(Club visitor) {
-		this.visitor = visitor;
-	}
+	/*
+	 * public Club getVisitor() { return visitor; }
+	 * 
+	 * public void setVisitor(Club visitor) { this.visitor = visitor; }
+	 */
 
 	public int getHome_goals() {
 		return home_goals;
@@ -147,10 +147,11 @@ public class Match {
 
 	@Override
 	public String toString() {
-		return "Match [id=" + id + ", host=" + host + ", visitor=" + visitor + ", home_goals=" + home_goals
-				+ ", away_goals=" + away_goals + ", game_date=" + game_date + ", winner=" + winner + ", league="
-				+ league + "]";
+		return "Match [match_id=" + match_id + ", host=" + host + ", home_goals=" + home_goals + ", away_goals="
+				+ away_goals + ", game_date=" + game_date + ", winner=" + winner + ", league=" + league + "]";
 	}
+
+	
 	
 
 }
