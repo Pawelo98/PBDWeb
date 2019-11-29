@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name="Clubs")
 public class Club {
@@ -21,7 +22,7 @@ public class Club {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="Id")
-	private int id;
+	private int club_id;
 	
 	@Column(name="Name")
 	private String name;
@@ -74,6 +75,10 @@ public class Club {
 	    }    
     };
     
+    @Column(name="Nationality")
+	@Enumerated(EnumType.STRING)
+	private Nationality nationality;
+    
     @Column(name="Shirt_home")
 	private String shirtHome;
     
@@ -85,33 +90,47 @@ public class Club {
     				CascadeType.DETACH, CascadeType.REFRESH})
     private List<Match> hostMatches;
     
-    @OneToMany(mappedBy="visitor",
-    		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
-    				CascadeType.DETACH, CascadeType.REFRESH})
-    private List<Match> visitorMatches;
+	/*
+	 * @OneToMany(mappedBy="visitor", cascade= {CascadeType.PERSIST,
+	 * CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH}) private
+	 * List<Match> visitorMatches;
+	 */
     
     @OneToMany(mappedBy="club",
     		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
     				CascadeType.DETACH, CascadeType.REFRESH})
     private List<Worker> workers;
 
+    @OneToMany(mappedBy="club",
+    		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    				CascadeType.DETACH, CascadeType.REFRESH})
+    private List<User> users;
+    
+    @OneToMany(mappedBy="club",
+    		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    				CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Building> buildings;
+    
     public Club() {
     	
     }
     
-	public Club(String name, String shirtHome, String shirtAway) {  //dopisac nationality
+	public Club(String name, String nationality, String shirtHome, String shirtAway) {  //dopisac nationality
 		
 		this.name = name;
+		this.nationality = Nationality.valueOf(nationality);
 		this.shirtHome = shirtHome;
 		this.shirtAway = shirtAway;
 	}
 
-	public int getId() {
-		return id;
+
+
+	public int getClub_id() {
+		return club_id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setClub_id(int club_id) {
+		this.club_id = club_id;
 	}
 
 	public String getName() {
@@ -148,13 +167,12 @@ public class Club {
 		this.hostMatches = hostMatches;
 	}
 
-	public List<Match> getVisitorMatches() {
-		return visitorMatches;
-	}
-
-	public void setVisitorMatches(List<Match> visitorMatches) {
-		this.visitorMatches = visitorMatches;
-	}
+	/*
+	 * public List<Match> getVisitorMatches() { return visitorMatches; }
+	 * 
+	 * public void setVisitorMatches(List<Match> visitorMatches) {
+	 * this.visitorMatches = visitorMatches; }
+	 */
 	
 	
 
@@ -166,11 +184,40 @@ public class Club {
 		this.workers = workers;
 	}
 
+	
+    
+	public Nationality getNationality() {
+		return nationality;
+	}
+
+	public void setNationality(Nationality nationality) {
+		this.nationality = nationality;
+	}
+
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
+	}
+
+	public List<Building> getBuildings() {
+		return buildings;
+	}
+
+	public void setBuildings(List<Building> buildings) {
+		this.buildings = buildings;
+	}
+
 	@Override
 	public String toString() {
-		return "Club [id=" + id + ", name=" + name + ", shirtHome=" + shirtHome + ", shirtAway=" + shirtAway + "]";
+		return "Club [club_id=" + club_id + ", name=" + name + ", shirtHome=" + shirtHome + ", shirtAway=" + shirtAway
+				+ ", hostMatches=" + hostMatches +
+				//", visitorMatches=" + visitorMatches +
+				", workers=" + workers + "]";
 	}
-    
+
 	public void addHost(Match tempMatch) {
 		if (hostMatches == null) {
 			hostMatches = new ArrayList<>();
@@ -179,13 +226,11 @@ public class Club {
 		tempMatch.setHost(this);
 	}
 	
-	public void addVisitor(Match tempMatch) {
-		if (visitorMatches == null) {
-			visitorMatches = new ArrayList<>();
-		}
-		visitorMatches.add(tempMatch);
-		tempMatch.setVisitor(this);
-	}
+	/*
+	 * public void addVisitor(Match tempMatch) { if (visitorMatches == null) {
+	 * visitorMatches = new ArrayList<>(); } visitorMatches.add(tempMatch);
+	 * tempMatch.setVisitor(this); }
+	 */
 	
 	public void addWorker(Worker tempWorker) {
 		if (workers == null) {
@@ -193,6 +238,23 @@ public class Club {
 		}
 		workers.add(tempWorker);
 		tempWorker.setClub(this);
+	}
+	
+	
+	public void addUser(User tempUser) {
+		if (users == null) {
+			users = new ArrayList<>();
+		}
+		users.add(tempUser);
+		tempUser.setClub(this);
+	}
+	
+	public void addBuilding(Building tempBuilding) {
+		if (buildings == null) {
+			buildings = new ArrayList<>();
+		}
+		buildings.add(tempBuilding);
+		tempBuilding.setClub(this);
 	}
 	
 	
