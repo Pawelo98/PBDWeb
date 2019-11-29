@@ -1,5 +1,6 @@
 package app.entities;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +8,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -58,6 +61,11 @@ public class Worker {
 	@Column(name="Position")
 	@Enumerated(EnumType.STRING)
 	private Position position;
+	
+	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinColumn(name="id")
+	private Club club;
 
 	
 //	@Column(name="club")
@@ -67,10 +75,9 @@ public class Worker {
 		
 	}
 	
-	public Worker(int id, String name, String surname, float earnings, String department, boolean isPlayer,
+	public Worker(String name, String surname, float earnings, String department, boolean isPlayer,
 			boolean isInjured, int shirtNumber, String strongFoot, int height, int weight, String position) {
-		super();
-		this.id = id;
+		
 		this.name = name;
 		this.surname = surname;
 		this.earnings = earnings;
@@ -180,13 +187,14 @@ public class Worker {
 		this.position = position;
 	}
 	
-//	public int getClub() {
-//		return club;
-//	}
-//
-//	public void setClub(int club) {
-//		this.club = club;
-//	}
+
+	public Club getClub() {
+		return club;
+	}
+
+	public void setClub(Club club) {
+		this.club = club;
+	}
 
 	@Override
 	public String toString() {
