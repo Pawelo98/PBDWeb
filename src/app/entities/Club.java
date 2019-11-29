@@ -1,5 +1,9 @@
 package app.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +11,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -74,14 +79,28 @@ public class Club {
     
     @Column(name="Shirt_away")
 	private String shirtAway;
+    
+    @OneToMany(mappedBy="host",
+    		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    				CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Match> hostMatches;
+    
+    @OneToMany(mappedBy="visitor",
+    		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    				CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Match> visitorMatches;
+    
+    @OneToMany(mappedBy="club",
+    		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    				CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Worker> workers;
 
     public Club() {
     	
     }
     
-	public Club(int id, String name, String shirtHome, String shirtAway) {  //dopisac nationality
+	public Club(String name, String shirtHome, String shirtAway) {  //dopisac nationality
 		
-		this.id = id;
 		this.name = name;
 		this.shirtHome = shirtHome;
 		this.shirtAway = shirtAway;
@@ -118,11 +137,64 @@ public class Club {
 	public void setShirtAway(String shirtAway) {
 		this.shirtAway = shirtAway;
 	}
+	
+	
+
+	public List<Match> getHostMatches() {
+		return hostMatches;
+	}
+
+	public void setHostMatches(List<Match> hostMatches) {
+		this.hostMatches = hostMatches;
+	}
+
+	public List<Match> getVisitorMatches() {
+		return visitorMatches;
+	}
+
+	public void setVisitorMatches(List<Match> visitorMatches) {
+		this.visitorMatches = visitorMatches;
+	}
+	
+	
+
+	public List<Worker> getWorkers() {
+		return workers;
+	}
+
+	public void setWorkers(List<Worker> workers) {
+		this.workers = workers;
+	}
 
 	@Override
 	public String toString() {
 		return "Club [id=" + id + ", name=" + name + ", shirtHome=" + shirtHome + ", shirtAway=" + shirtAway + "]";
 	}
     
+	public void addHost(Match tempMatch) {
+		if (hostMatches == null) {
+			hostMatches = new ArrayList<>();
+		}
+		hostMatches.add(tempMatch);
+		tempMatch.setHost(this);
+	}
+	
+	public void addVisitor(Match tempMatch) {
+		if (visitorMatches == null) {
+			visitorMatches = new ArrayList<>();
+		}
+		visitorMatches.add(tempMatch);
+		tempMatch.setVisitor(this);
+	}
+	
+	public void addWorker(Worker tempWorker) {
+		if (workers == null) {
+			workers = new ArrayList<>();
+		}
+		workers.add(tempWorker);
+		tempWorker.setClub(this);
+	}
+	
+	
     
 }
