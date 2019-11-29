@@ -43,11 +43,15 @@ public class Match {
 	@Column(name="Id")
 	private int id;
 	
-	@Column(name="Host")
-	private int host;
+	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinColumn(name="host_id")
+	private Club host;
 	
-	@Column(name="Visitor")
-	private int visitor;
+	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinColumn(name="visitor_id")
+	private Club visitor;
 	
 	@Column(name="Home_goals")
 	private int home_goals;
@@ -68,10 +72,8 @@ public class Match {
 	@JoinColumn(name="id")
 	private League league;
 
-	public Match(int host, int visitor, int home_goals, int away_goals, Date game_date, String winner) {
+	public Match(int home_goals, int away_goals, Date game_date, String winner) {
 		
-		this.host = host;
-		this.visitor = visitor;
 		this.home_goals = home_goals;
 		this.away_goals = away_goals;
 		this.game_date = game_date;
@@ -86,19 +88,20 @@ public class Match {
 		this.id = id;
 	}
 
-	public int getHost() {
+
+	public Club getHost() {
 		return host;
 	}
 
-	public void setHost(int host) {
+	public void setHost(Club host) {
 		this.host = host;
 	}
 
-	public int getVisitor() {
+	public Club getVisitor() {
 		return visitor;
 	}
 
-	public void setVisitor(int visitor) {
+	public void setVisitor(Club visitor) {
 		this.visitor = visitor;
 	}
 
