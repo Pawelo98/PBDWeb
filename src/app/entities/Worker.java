@@ -68,7 +68,7 @@ public class Worker {
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="club_id")
+	@JoinColumn(name="Club")
 	private Club club;
 	
 	@OneToMany(mappedBy="initiator",
