@@ -24,12 +24,12 @@ public class Invite {
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="meeting_id")
+	@JoinColumn(name="Meeting")
 	private Meeting meeting;
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="worker_id")
+	@JoinColumn(name="Worker")
 	private Worker worker;
 	
 	
