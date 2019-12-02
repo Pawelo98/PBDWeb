@@ -1,5 +1,9 @@
 package app.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +11,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -20,7 +27,7 @@ public class Building {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="Id")
-	private int id;
+	private int building_id;
 	
 	@Column(name="Surface")
 	private float surface;
@@ -34,6 +41,18 @@ public class Building {
 	@Column(name="Type")
 	@Enumerated(EnumType.STRING)
 	private Type type;
+	
+	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinColumn(name="Club")
+	private Club club;
+	
+	@OneToMany(mappedBy="building",
+    		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    				CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Meeting> meetings;
+	
+	
 
 	
 	
@@ -44,21 +63,31 @@ public class Building {
 		
 	}
 	
-	public Building(int id, float surface, String name, String address, String type) {
+	public Building(float surface, String name, String address, String type) {
 		
-		this.id = id;
+		
 		this.surface = surface;
 		this.name = name;
 		this.address = address;
 		this.type = Type.valueOf(type);
 	}
 
-	public int getId() {
-		return id;
+	
+
+	public int getBuilding_id() {
+		return building_id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setBuilding_id(int building_id) {
+		this.building_id = building_id;
+	}
+
+	public List<Meeting> getMeetings() {
+		return meetings;
+	}
+
+	public void setMeetings(List<Meeting> meetings) {
+		this.meetings = meetings;
 	}
 
 	public float getSurface() {
@@ -92,6 +121,22 @@ public class Building {
 	public void setType(Type type) {
 		this.type = type;
 	}
+
+	
+	
+	public Club getClub() {
+		return club;
+	}
+
+	public void setClub(Club club) {
+		this.club = club;
+	}
+
+	@Override
+	public String toString() {
+		return "Building [building_id=" + building_id + ", surface=" + surface + ", name=" + name + ", address="
+				+ address + ", type=" + type + ", meetings=" + meetings + "]";
+	}
 	
 //	public int getClub() {
 //	return club;
@@ -101,12 +146,12 @@ public class Building {
 //	this.club = club;
 //}
 
-	@Override
-	public String toString() {
-		return "Building [id=" + id + ", surface=" + surface + ", name=" + name + ", address=" + address + ", type="
-				+ type +
-				//", club=" + club +
-				"]";
+	public void addMeeting(Meeting tempMeeting) {
+		if (meetings == null) {
+			meetings = new ArrayList<>();
+		}
+		meetings.add(tempMeeting);
+		tempMeeting.setBuilding(this);
 	}
 	
 

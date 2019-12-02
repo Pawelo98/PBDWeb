@@ -1,5 +1,9 @@
 package app.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +11,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -21,7 +28,7 @@ public class Worker {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="Id")
-	private int id;
+	private int worker_id;
 	
 	@Column(name="Name")
 	private String name;
@@ -58,6 +65,21 @@ public class Worker {
 	@Column(name="Position")
 	@Enumerated(EnumType.STRING)
 	private Position position;
+	
+	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinColumn(name="Club")
+	private Club club;
+	
+	@OneToMany(mappedBy="initiator",
+    		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    				CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Meeting> meetings;
+	
+	@OneToMany(mappedBy="worker",
+    		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+    				CascadeType.DETACH, CascadeType.REFRESH})
+    private List<Invite> invites;
 
 	
 //	@Column(name="club")
@@ -67,10 +89,9 @@ public class Worker {
 		
 	}
 	
-	public Worker(int id, String name, String surname, float earnings, String department, boolean isPlayer,
+	public Worker(String name, String surname, float earnings, String department, boolean isPlayer,
 			boolean isInjured, int shirtNumber, String strongFoot, int height, int weight, String position) {
-		super();
-		this.id = id;
+		
 		this.name = name;
 		this.surname = surname;
 		this.earnings = earnings;
@@ -84,12 +105,14 @@ public class Worker {
 		this.position = Position.valueOf(position);
 	}
 
-	public int getId() {
-		return id;
+	
+
+	public int getWorker_id() {
+		return worker_id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setWorker_id(int worker_id) {
+		this.worker_id = worker_id;
 	}
 
 	public String getName() {
@@ -180,23 +203,54 @@ public class Worker {
 		this.position = position;
 	}
 	
-//	public int getClub() {
-//		return club;
-//	}
-//
-//	public void setClub(int club) {
-//		this.club = club;
-//	}
+
+	public Club getClub() {
+		return club;
+	}
+
+	public void setClub(Club club) {
+		this.club = club;
+	}
+	
+	public List<Meeting> getMeetings() {
+		return meetings;
+	}
+
+	public void setMeetings(List<Meeting> meetings) {
+		this.meetings = meetings;
+	}
+
+	public List<Invite> getInvites() {
+		return invites;
+	}
+
+	public void setInvites(List<Invite> invites) {
+		this.invites = invites;
+	}
 
 	@Override
 	public String toString() {
-		return "Worker [id=" + id + ", name=" + name + ", surname=" + surname + ", earnings=" + earnings
+		return "Worker [worker_id=" + worker_id + ", name=" + name + ", surname=" + surname + ", earnings=" + earnings
 				+ ", department=" + department + ", isPlayer=" + isPlayer + ", isInjured=" + isInjured
 				+ ", shirtNumber=" + shirtNumber + ", strongFoot=" + strongFoot + ", height=" + height + ", weight="
-				+ weight + ", position=" + position +
-				//", club=" + club +
-				"]";
+				+ weight + ", position=" + position + ", club=" + club + "]";
 	}
-
+	
+	public void addMeeting(Meeting tempMeeting) {
+		if (meetings == null) {
+			meetings = new ArrayList<>();
+		}
+		meetings.add(tempMeeting);
+		tempMeeting.setInitiator(this);
+	}
+	
+	public void addInvite(Invite tempInvite) {
+		if (invites == null) {
+			invites = new ArrayList<>();
+		}
+		invites.add(tempInvite);
+		tempInvite.setWorker(this);
+	}
+	
 	
 }

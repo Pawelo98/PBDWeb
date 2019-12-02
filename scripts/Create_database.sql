@@ -203,7 +203,6 @@ CREATE TABLE IF NOT EXISTS `Matches` (
 CREATE TABLE IF NOT EXISTS `Refereeing` (
   `Match` INT NOT NULL,
   `Referee` INT NOT NULL,
-  `Position` ENUM('VAR', 'Linesman', 'Technical', 'Main') DEFAULT NULL,
   FOREIGN KEY(`Match`) REFERENCES `Matches`(`Id`)
   ON DELETE NO ACTION ON UPDATE NO ACTION,
   FOREIGN KEY(`Referee`) REFERENCES `Referees`(`Id`)

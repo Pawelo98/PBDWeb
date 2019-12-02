@@ -6,11 +6,15 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import app.entities.Club.Nationality;
 
 @Entity
 @Table(name="Leagues")
@@ -20,7 +24,7 @@ public class League {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="Id")
-	private int id;
+	private int league_id;
 	
 	@Column(name="Name")
 	private String name;
@@ -74,6 +78,10 @@ public class League {
 	    }    
     };
     
+    @Column(name="Nationality")
+	@Enumerated(EnumType.STRING)
+	private Nationality nationality;
+    
     @Column(name="Level")
 	private int level;
     
@@ -92,20 +100,23 @@ public class League {
     	
     }
     
-	public League(String name, int level, int win_pts, int draw_pts) {
+	public League(String name, String nationality, int level, int win_pts, int draw_pts) {
 		
 		this.name = name;
+		this.nationality = Nationality.valueOf(nationality);
 		this.level = level;
 		this.win_pts = win_pts;
 		this.draw_pts = draw_pts;
 	}
 
-	public int getId() {
-		return id;
+	
+
+	public int getLeague_id() {
+		return league_id;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setLeague_id(int league_id) {
+		this.league_id = league_id;
 	}
 
 	public String getName() {
@@ -150,12 +161,14 @@ public class League {
 		this.matches = matches;
 	}
 
+	
+    
 	@Override
 	public String toString() {
-		return "League [id=" + id + ", name=" + name + ", level=" + level + ", win_pts=" + win_pts + ", draw_pts="
-				+ draw_pts + "]";
+		return "League [league_id=" + league_id + ", name=" + name + ", level=" + level + ", win_pts=" + win_pts
+				+ ", draw_pts=" + draw_pts + ", matches=" + matches + "]";
 	}
-    
+
 	public void add(Match tempMatch) {
 		if (matches == null) {
 			matches = new ArrayList<>();

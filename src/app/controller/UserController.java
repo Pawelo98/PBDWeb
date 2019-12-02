@@ -93,7 +93,7 @@ public class UserController {
 			int win_pts = 3;
 			int draw_pts = 1;
 			
-			League league = new League(name, level, win_pts, draw_pts);
+			League league = new League(name, nationality, level, win_pts, draw_pts);
 			userService.saveLeague(league);
 			
 //			String login = faker.name().username();
