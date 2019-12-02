@@ -1,5 +1,8 @@
 package app.entities;
 
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -7,6 +10,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 
@@ -80,6 +86,13 @@ public class Referee {
 	@Column(name="Nationality")
 	@Enumerated(EnumType.STRING)
 	private Nationality nationality;
+	
+	@ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinTable(name="refereeing",
+			joinColumns=@JoinColumn(name="Referee"),
+			inverseJoinColumns=@JoinColumn(name="Match"))
+	private List<Match> matches;
 
 	public Referee() {
 		
@@ -126,10 +139,20 @@ public class Referee {
 		this.nationality = nationality;
 	}
 
+	public List<Match> getMatches() {
+		return matches;
+	}
+
+	public void setMatches(List<Match> matches) {
+		this.matches = matches;
+	}
+
 	@Override
 	public String toString() {
 		return "Referee [referee_id=" + referee_id + ", name=" + name + ", surname=" + surname + ", nationality="
 				+ nationality + "]";
 	}
+	
+	
   
 }

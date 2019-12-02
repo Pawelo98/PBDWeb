@@ -1,6 +1,8 @@
 package app.entities;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -45,16 +49,16 @@ public class Match {
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="club_id")
+	@JoinColumn(name="Host")
 	private Club host;
 	
 	
-	/*
-	 * @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
-	 * CascadeType.DETACH, CascadeType.REFRESH})
-	 * 
-	 * @JoinColumn(name="club_id") private Club visitor;
-	 */
+	
+	 @ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+			 CascadeType.DETACH, CascadeType.REFRESH}) 
+	 @JoinColumn(name="Visitor")
+	 private Club visitor;
+	 
 	
 	@Column(name="Home_goals")
 	private int home_goals;
@@ -72,8 +76,15 @@ public class Match {
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
     				CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="league_id")
+	@JoinColumn(name="League")
 	private League league;
+	
+	@ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+			CascadeType.DETACH, CascadeType.REFRESH})
+	@JoinTable(name="refereeing",
+			joinColumns=@JoinColumn(name="Match"),
+			inverseJoinColumns=@JoinColumn(name="Referee"))
+	private List<Referee> referees;
 
 	public Match(int home_goals, int away_goals, Date game_date, String winner) {
 		
@@ -99,11 +110,11 @@ public class Match {
 		this.host = host;
 	}
 
-	/*
-	 * public Club getVisitor() { return visitor; }
-	 * 
-	 * public void setVisitor(Club visitor) { this.visitor = visitor; }
-	 */
+	
+	 public Club getVisitor() { return visitor; }
+	 
+	 public void setVisitor(Club visitor) { this.visitor = visitor; }
+	 
 
 	public int getHome_goals() {
 		return home_goals;
@@ -145,10 +156,26 @@ public class Match {
 		this.league = league;
 	}
 
+	public List<Referee> getReferees() {
+		return referees;
+	}
+
+	public void setReferees(List<Referee> referees) {
+		this.referees = referees;
+	}
+
 	@Override
 	public String toString() {
 		return "Match [match_id=" + match_id + ", host=" + host + ", home_goals=" + home_goals + ", away_goals="
 				+ away_goals + ", game_date=" + game_date + ", winner=" + winner + ", league=" + league + "]";
+	}
+	
+	public void addReferee(Referee theReferee) {
+		if (referees==null) {
+			referees = new ArrayList<>();
+		}
+		
+		referees.add(theReferee);
 	}
 
 	

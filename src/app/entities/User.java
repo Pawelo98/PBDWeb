@@ -34,7 +34,7 @@ public class User {
 		private String password;
 		
 		@Temporal(TemporalType.DATE)
-		@Column(name="registration_date")
+		@Column(name="Registration_date")
 		private Date registrationDate;
 		
 		@Column(name="Name")
@@ -43,7 +43,7 @@ public class User {
 		@Column(name="Surname")
 		private String surname;
 		
-		@Column(name="role")
+		@Column(name="Role")
 		@Enumerated(EnumType.STRING)
 		private Role role;
 		
@@ -52,7 +52,7 @@ public class User {
 		
 		@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 				CascadeType.DETACH, CascadeType.REFRESH})
-		@JoinColumn(name="club_id")
+		@JoinColumn(name="Club")
 		private Club club;
 		
 		public User() {

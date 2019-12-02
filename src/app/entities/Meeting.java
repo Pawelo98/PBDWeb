@@ -27,7 +27,7 @@ public class Meeting {
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="building_id")
+	@JoinColumn(name="Building")
 	private Building building;
 	
 	@Column(name="Room")
@@ -35,7 +35,7 @@ public class Meeting {
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="worker_id")
+	@JoinColumn(name="Worker")
 	private Worker initiator;
 	
 	@Column(name="Estimated_length")
