@@ -2,6 +2,7 @@ package app.entities;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -9,6 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,7 +25,7 @@ public class User {
 		@Id
 		@GeneratedValue(strategy=GenerationType.IDENTITY)
 		@Column(name="Id")
-		private int id;
+		private int user_id;
 		
 		@Column(name="Login")
 		private String login;
@@ -31,7 +34,7 @@ public class User {
 		private String password;
 		
 		@Temporal(TemporalType.DATE)
-		@Column(name="registration_date")
+		@Column(name="Registration_date")
 		private Date registrationDate;
 		
 		@Column(name="Name")
@@ -40,15 +43,17 @@ public class User {
 		@Column(name="Surname")
 		private String surname;
 		
-		@Column(name="role")
+		@Column(name="Role")
 		@Enumerated(EnumType.STRING)
 		private Role role;
 		
 		@Column(name="Address")
 		private String address;
 		
-//		@Column(name="club")
-//		private int club;
+		@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
+				CascadeType.DETACH, CascadeType.REFRESH})
+		@JoinColumn(name="Club")
+		private Club club;
 		
 		public User() {
 			
@@ -64,12 +69,14 @@ public class User {
 			this.address = addressG;
 		}
 
-		public int getId() {
-			return id;
+		
+
+		public int getUser_id() {
+			return user_id;
 		}
 
-		public void setId(int id) {
-			this.id = id;
+		public void setUser_id(int user_id) {
+			this.user_id = user_id;
 		}
 
 		public String getLogin() {
@@ -128,19 +135,21 @@ public class User {
 			this.address = address;
 		}
 
-//		public int getClub() {
-//			return club;
-//		}
-//
-//		public void setClub(int club) {
-//			this.club = club;
-//		}
+
+		public Club getClub() {
+			return club;
+		}
+
+		public void setClub(Club club) {
+			this.club = club;
+		}
 
 		@Override
 		public String toString() {
-			return "User [id=" + id + ", login=" + login + ", password=" + password + ", name=" + name + ", surname="
-					+ surname + ", role=" + role + ", address=" + address + 
-					//", club=" + club + 
-					"]";
+			return "User [user_id=" + user_id + ", login=" + login + ", password=" + password + ", registrationDate="
+					+ registrationDate + ", name=" + name + ", surname=" + surname + ", role=" + role + ", address="
+					+ address + ", club=" + club + "]";
 		}
+
+		
 }
