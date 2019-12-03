@@ -2,6 +2,7 @@ package app.entities;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,8 +14,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import app.entities.Club.Nationality;
 
 @Entity
 @Table(name="Leagues")
@@ -29,7 +28,6 @@ public class League {
 	@Column(name="Name")
 	private String name;
 	
-
 	public enum Nationality { Afghanistan, Albania, Algeria, AmericanSamoa ("American Samoa"), Andorra, Angola, Anguilla,
         Antarctica, AntiguaandBarbuda("Antigua and Barbuda"), Argentina, Armenia, Aruba, Australia, Austria, Azerbaijan, Bahamas,
         Bahrain, Bangladesh, Barbados, Belarus, Belgium, Belize, Benin, Bermuda, Bhutan, Bolivia,
@@ -75,7 +73,19 @@ public class League {
 	
 	    public String getName() {
 	        return this.name;
-	    }    
+	    }
+	    
+	    public static Nationality enumFromString(String displayString)
+	    {
+	        for(Nationality type : Nationality.values()) {
+	            if(type.toString().equals(displayString))
+	                return type;
+	        }
+	        
+	        Random generator = new Random();
+	        Nationality nat = Nationality.values()[generator.nextInt(Nationality.values().length)];
+	        return nat;
+	    }
     };
     
     @Column(name="Nationality")
@@ -103,7 +113,7 @@ public class League {
 	public League(String name, String nationality, int level, int win_pts, int draw_pts) {
 		
 		this.name = name;
-		this.nationality = Nationality.valueOf(nationality);
+		this.nationality = Nationality.enumFromString(nationality);
 		this.level = level;
 		this.win_pts = win_pts;
 		this.draw_pts = draw_pts;
