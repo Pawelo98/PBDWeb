@@ -91,7 +91,7 @@ public class Match {
 		this.home_goals = home_goals;
 		this.away_goals = away_goals;
 		this.game_date = game_date;
-		this.winner =Winner.valueOf(winner);
+		this.winner = Winner.valueOf(winner);
 	}
 	
 	public int getMatch_id() {
