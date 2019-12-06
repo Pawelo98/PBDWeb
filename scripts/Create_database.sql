@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `Buildings` (
   `Surface` DECIMAL(50, 2) DEFAULT NULL,
   `Name` varchar(128) DEFAULT NULL,
   `Address` varchar(128) DEFAULT NULL,
-  `Type` ENUM('Stadium', 'Pitch') DEFAULT NULL,
+  `Type` ENUM('Stadium', 'Pitch', 'Training', 'Medical', 'Research', 'Warehouse') DEFAULT NULL,
   `Club` INT NOT NULL,
   FOREIGN KEY(`Club`) REFERENCES `Clubs`(`Id`)
   ON DELETE NO ACTION ON UPDATE NO ACTION,
