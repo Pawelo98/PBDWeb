@@ -18,10 +18,10 @@ import javax.persistence.Table;
 
 
 @Entity
-@Table(name="Bulidings")
+@Table(name="Buildings")
 public class Building {
 
-	public enum Type { Stadium, Pitch };
+	public enum Type { Stadium, Pitch, Training, Medical, Research, Warehouse };
 
 	
 	@Id
@@ -51,13 +51,6 @@ public class Building {
     		cascade= {CascadeType.PERSIST, CascadeType.MERGE,
     				CascadeType.DETACH, CascadeType.REFRESH})
     private List<Meeting> meetings;
-	
-	
-
-	
-	
-//	@Column(name="club")
-//	private int club;
 	
 	public Building() {
 		
@@ -137,14 +130,6 @@ public class Building {
 		return "Building [building_id=" + building_id + ", surface=" + surface + ", name=" + name + ", address="
 				+ address + ", type=" + type + ", meetings=" + meetings + "]";
 	}
-	
-//	public int getClub() {
-//	return club;
-//}
-//
-//public void setClub(int club) {
-//	this.club = club;
-//}
 
 	public void addMeeting(Meeting tempMeeting) {
 		if (meetings == null) {
@@ -153,9 +138,6 @@ public class Building {
 		meetings.add(tempMeeting);
 		tempMeeting.setBuilding(this);
 	}
-	
-
-	
 	
 }
 

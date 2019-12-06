@@ -1,6 +1,7 @@
 package app.entities;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -69,7 +70,19 @@ public class Referee {
 	
 	    public String getName() {
 	        return this.name;
-	    }    
+	    }
+	    
+	    public static Nationality enumFromString(String displayString)
+	    {
+	        for(Nationality type : Nationality.values()) {
+	            if(type.toString().equals(displayString))
+	                return type;
+	        }
+	        
+	        Random generator = new Random();
+	        Nationality nat = Nationality.values()[generator.nextInt(Nationality.values().length)];
+	        return nat;
+	    }
     };
     
     @Id
@@ -98,14 +111,11 @@ public class Referee {
 		
 	}
 	
-	public Referee(int id, String name, String surname, String nationality) {
-		
+	public Referee(String name, String surname, String nationality) {
 		this.name = name;
 		this.surname = surname;
-		this.nationality = Nationality.valueOf(nationality);
+		this.nationality = Nationality.enumFromString(nationality);
 	}
-
-	
 
 	public int getReferee_id() {
 		return referee_id;

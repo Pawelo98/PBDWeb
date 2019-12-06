@@ -105,7 +105,13 @@ public class Worker {
 		this.position = Position.valueOf(position);
 	}
 
-	
+	public Worker(String name, String surname, float earnings, String department) {
+		
+		this.name = name;
+		this.surname = surname;
+		this.earnings = earnings;
+		this.department = Department.valueOf(department);
+	}
 
 	public int getWorker_id() {
 		return worker_id;
