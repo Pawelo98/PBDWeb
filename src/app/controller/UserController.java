@@ -1,5 +1,8 @@
 package app.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -19,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.github.javafaker.Faker;
 
 import app.entities.Club;
+import app.entities.Invite;
 import app.entities.League;
 import app.entities.Match;
+import app.entities.Meeting;
 import app.entities.Referee;
 import app.entities.User;
 import app.entities.Worker;
@@ -33,6 +38,10 @@ import app.service.ClubService;
 import app.service.RefereeService;
 import app.service.UserService;
 import app.service.WorkerService;
+import app.service.LeagueService;
+import app.service.MeetingService;
+import app.service.InviteService;
+
 
 @Controller
 @RequestMapping("/user")
@@ -53,6 +62,15 @@ public class UserController {
 	@Autowired
 	private WorkerService workerService;
 	
+	@Autowired
+	private LeagueService leagueService;
+	
+	@Autowired
+	private MeetingService meetingService;
+	
+	@Autowired
+	private InviteService inviteService;
+	
 	@GetMapping("/list")
 	public String listCustomers(Model model)
 	{
@@ -64,9 +82,10 @@ public class UserController {
 	}
 	
 	@PostMapping("/list")
-	public String saveUsers()
+	public String saveUsers() throws ParseException
 	{
 		Random generator = new Random();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		
 		// dodawanie sêdziów
 		for(int i=0; i<20; i++)
@@ -142,6 +161,7 @@ public class UserController {
 			}
 			
 			// dodawanie pracowników
+			ArrayList<Worker> workers = new ArrayList<Worker>();
 			for(int g=0; g<30; g++) {
 				String nameWorker = faker.name().firstName();
 				String surnameWorker = faker.name().lastName();
@@ -163,15 +183,17 @@ public class UserController {
 							isInjured, shirtNumber, strongFoot, height, weight, position);
 					worker.setClub(club);
 					workerService.saveWorker(worker);
+					workers.add(worker);
 				} else {
 					Worker worker = new Worker(nameWorker, surnameWorker, earnings, role);
 					worker.setClub(club);
 					workerService.saveWorker(worker);
+					workers.add(worker);
 				}
 			}
 			
 			// dodawanie budynków klubowych
-			
+			ArrayList<Building> buildings = new ArrayList<Building>();
 			for(int h=0; h<5; h++) {
 				String nameBuilding = faker.company().name();
 				String addressBuilding = faker.address().fullAddress();
@@ -183,7 +205,62 @@ public class UserController {
 				Building building = new Building(surface, nameBuilding, addressBuilding, type);
 				building.setClub(club);
 				buildingService.saveBuilding(building);
+				buildings.add(building);
 			}
+			
+			// dodawanie spotkañ
+			ArrayList<Meeting> meetings = new ArrayList<Meeting>();
+			for (int k=0; k<3; k++) {
+				Building building = buildings.get(generator.nextInt(buildings.size()));
+				String room = String.valueOf(generator.nextInt(900) + 100);
+				Worker initiator = workers.get(generator.nextInt(workers.size()));
+				float estimated_length = generator.nextFloat() + generator.nextInt(5);
+				
+				Date from = format.parse("2019-01-01 01:00");
+				Date to = format.parse("2022-12-31 23:00");
+				Date meeting_date = faker.date().between(from, to);   //dodaæ czas, czy moze isc pare zaproszen do jednego?
+				
+				Meeting meeting = new Meeting(room, estimated_length, meeting_date);
+				meeting.setInitiator(initiator);
+				meeting.setBuilding(building);
+				meetingService.saveMeeting(meeting);
+				meetings.add(meeting);
+				
+				//dodawanie zaproszeñ
+				for (int l=0; l<5; l++) {
+					String message = "Zapraszam na spotkanie które odbêdzie siê w budynku: " + meeting.getBuilding().getName() + " w pokoju: " + meeting.getRoom()
+									+ " w terminie: " + meeting.getMeeting_date();
+					
+					Worker worker = workers.get(generator.nextInt(workers.size()));
+					
+					Invite invite = new Invite(message);
+					invite.setMeeting(meeting);
+					invite.setWorker(worker);
+					inviteService.saveInvite(invite);
+					
+				}				
+			}			
+		}
+		
+		// dodawanie lig
+		for (int i=0; i<4; i++) {
+			
+			String nationality;
+			String name;
+			int year = 2019;
+			if(i<2) {
+				nationality = "Germany";
+				name = nationality + " " + (year-i);
+			} else {
+				nationality = "Poland";
+				name = nationality + " " + (year-i+2);
+			}
+			int level = 1;
+			int win_pts = generator.nextInt(2) + 2;
+			int draw_pts = 1;
+			
+			League league = new League(name, nationality, level, win_pts, draw_pts);
+			leagueService.saveLeague(league);
 		}
 		return "redirect:/user/list";
 	}

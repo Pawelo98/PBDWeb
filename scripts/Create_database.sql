@@ -227,7 +227,7 @@ CREATE TABLE IF NOT EXISTS `Meetings` (
 
 CREATE TABLE IF NOT EXISTS `Invites` (
   `Id` INT NOT NULL AUTO_INCREMENT UNIQUE,
-  `Message` varchar(128) DEFAULT NULL,
+  `Message` varchar(256) DEFAULT NULL,
   `Meeting` INT NOT NULL,
   `Worker` INT NOT NULL,
   FOREIGN KEY(`Worker`) REFERENCES `Workers`(`Id`)
