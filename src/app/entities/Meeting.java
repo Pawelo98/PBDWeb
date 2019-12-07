@@ -35,7 +35,7 @@ public class Meeting {
 	
 	@ManyToOne(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinColumn(name="Worker")
+	@JoinColumn(name="Initiator")
 	private Worker initiator;
 	
 	@Column(name="Estimated_length")
