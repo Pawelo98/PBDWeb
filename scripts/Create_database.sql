@@ -188,7 +188,7 @@ CREATE TABLE IF NOT EXISTS `Matches` (
   `Home_goals` INT DEFAULT NULL,
   `Away_goals` INT DEFAULT NULL,
   `Game_date` DATE NOT NULL,
-  `Winner` ENUM('1', '0', '2') DEFAULT NULL,
+  `Winner` ENUM('Zero', 'One', 'Two') DEFAULT NULL,
   `League` INT DEFAULT NULL,
   FOREIGN KEY(`Host`) REFERENCES `Clubs`(`Id`)
   ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -201,13 +201,13 @@ CREATE TABLE IF NOT EXISTS `Matches` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `Refereeing` (
-  `Match` INT NOT NULL,
-  `Referee` INT NOT NULL,
-  FOREIGN KEY(`Match`) REFERENCES `Matches`(`Id`)
+  `Match_id` INT NOT NULL,
+  `Referee_id` INT NOT NULL,
+  FOREIGN KEY(`Match_id`) REFERENCES `Matches`(`Id`)
   ON DELETE NO ACTION ON UPDATE NO ACTION,
-  FOREIGN KEY(`Referee`) REFERENCES `Referees`(`Id`)
+  FOREIGN KEY(`Referee_id`) REFERENCES `Referees`(`Id`)
   ON DELETE NO ACTION ON UPDATE NO ACTION,
-  PRIMARY KEY(`Match`, `Referee`)
+  PRIMARY KEY(`Match_id`, `Referee_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- kto, gdzie, kto organizuje
