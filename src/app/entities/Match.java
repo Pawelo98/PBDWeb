@@ -26,7 +26,7 @@ import app.entities.Referee.Nationality;
 @Table(name="Matches")
 public class Match {
 	
-	public enum Winner { One ("1"), Two ("2"), Three ("3"); 
+	public enum Winner { Zero ("0"), One ("1"), Two ("2"); 
 		
 		private String name;
 		
@@ -81,17 +81,23 @@ public class Match {
 	
 	@ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinTable(name="refereeing",
-			joinColumns=@JoinColumn(name="Match"),
-			inverseJoinColumns=@JoinColumn(name="Referee"))
+	@JoinTable(name="Refereeing",
+			joinColumns=@JoinColumn(name="Match_id"),
+			inverseJoinColumns=@JoinColumn(name="Referee_id"))
 	private List<Referee> referees;
 
+	// mecze rozegrane
 	public Match(int home_goals, int away_goals, Date game_date, String winner) {
 		
 		this.home_goals = home_goals;
 		this.away_goals = away_goals;
 		this.game_date = game_date;
 		this.winner = Winner.valueOf(winner);
+	}
+	
+	// mecze nierozegrane
+	public Match(Date game_date) {
+		this.game_date = game_date;
 	}
 	
 	public int getMatch_id() {

@@ -102,9 +102,9 @@ public class Referee {
 	
 	@ManyToMany(cascade= {CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.DETACH, CascadeType.REFRESH})
-	@JoinTable(name="refereeing",
-			joinColumns=@JoinColumn(name="Referee"),
-			inverseJoinColumns=@JoinColumn(name="Match"))
+	@JoinTable(name="Refereeing",
+			joinColumns=@JoinColumn(name="Referee_id"),
+			inverseJoinColumns=@JoinColumn(name="Match_id"))
 	private List<Match> matches;
 
 	public Referee() {
